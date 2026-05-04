@@ -149,12 +149,12 @@ The sidebar provides thread management and navigation.
 
 ### ThreadContainer
 
-Wrapper for the main chat area with optional artifact panel support.
+Wrapper for the main chat area with optional detailed-view panel support.
 
 ```tsx
 <ThreadContainer
-  isArtifactActive={false} // Show artifact panel (desktop: side-by-side, mobile: overlay)
-  renderArtifact={() => <div />} // Artifact content
+  isDetailedViewActive={false} // Show detailed-view panel (desktop: side-by-side, mobile: overlay)
+  renderDetailedView={() => <div />} // Detailed-view content
 >
   {children}
 </ThreadContainer>
@@ -349,34 +349,36 @@ The Shell automatically adapts to screen size:
 | --------------------- | ----------------------- | ------------------------------------- |
 | Sidebar               | Collapsible side panel  | Hidden, accessible via hamburger menu |
 | Header                | In sidebar              | MobileHeader at top of thread         |
-| Artifact panel        | Resizable side-by-side  | Full-screen overlay                   |
+| Detailed-view panel   | Resizable side-by-side  | Full-screen overlay                   |
 | Conversation starters | Centered with max-width | Full-width with padding               |
 
-## Artifact Panel
+## Detailed-View Panel
 
-The Shell supports a resizable artifact panel on desktop:
+The Shell supports a resizable detailed-view panel on desktop:
 
 ```tsx
 <ThreadContainer
-  isArtifactActive={true}
-  renderArtifact={() => <div>{/* Your artifact content (code preview, document, etc.) */}</div>}
+  isDetailedViewActive={true}
+  renderDetailedView={() => (
+    <div>{/* Your detailed-view content (code preview, document, etc.) */}</div>
+  )}
 >
   {/* Chat content */}
 </ThreadContainer>
 ```
 
-On desktop, the artifact panel appears to the right of the chat and can be resized by dragging the separator. On mobile, it appears as a full-screen overlay.
+On desktop, the detailed-view panel appears to the right of the chat and can be resized by dragging the separator. On mobile, it appears as a full-screen overlay.
 
 ## Comparison with Other Components
 
-| Feature        | Shell             | CopilotShell       | BottomTray             |
-| -------------- | ----------------- | ------------------ | ---------------------- |
-| Layout         | Full page         | Sidebar panel      | Floating panel         |
-| Sidebar        | Yes (collapsible) | No                 | No                     |
-| Thread list    | Yes               | No                 | Yes (in header)        |
-| Artifact panel | Yes (resizable)   | Yes (overlay)      | No                     |
-| Mobile         | Responsive        | Responsive         | Fullscreen             |
-| Use case       | Primary chat app  | Side panel copilot | Secondary/support chat |
+| Feature       | Shell             | CopilotShell       | BottomTray             |
+| ------------- | ----------------- | ------------------ | ---------------------- |
+| Layout        | Full page         | Sidebar panel      | Floating panel         |
+| Sidebar       | Yes (collapsible) | No                 | No                     |
+| Thread list   | Yes               | No                 | Yes (in header)        |
+| Detailed-view | Yes (resizable)   | Yes (overlay)      | No                     |
+| Mobile        | Responsive        | Responsive         | Fullscreen             |
+| Use case      | Primary chat app  | Side panel copilot | Secondary/support chat |
 
 ## CSS Classes
 

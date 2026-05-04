@@ -13,7 +13,7 @@ $center-align-spacing: calc(32px + cssUtils.$space-s);
     padding: cssUtils.$space-m 14px;
   }
 
-  .openui-shell-thread-container--artifact-active & {
+  .openui-shell-thread-container--detailed-view-active & {
     padding-left: 0;
     padding-right: cssUtils.$space-m;
   }

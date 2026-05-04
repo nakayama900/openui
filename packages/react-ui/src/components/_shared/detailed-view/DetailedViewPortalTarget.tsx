@@ -1,25 +1,25 @@
-import { useArtifactPortalTarget } from "@openuidev/react-headless";
+import { useDetailedViewPortalTarget } from "@openuidev/react-headless";
 import { forwardRef, useCallback, useRef } from "react";
 
 /**
- * Props for {@link ArtifactPortalTarget}.
+ * Props for {@link DetailedViewPortalTarget}.
  */
-export type ArtifactPortalTargetProps = {
+export type DetailedViewPortalTargetProps = {
   /** Additional CSS class name(s) applied to the container element. */
   className?: string;
 };
 
 /**
- * Registers a DOM node as the render target for {@link ArtifactPanel} portals.
+ * Registers a DOM node as the render target for {@link DetailedViewPanel} portals.
  *
  * Mount exactly one instance in your layout. Renders a `<div>` with
  * `display: contents` so it doesn't affect layout flow.
  *
  * @category Components
  */
-export const ArtifactPortalTarget = forwardRef<HTMLDivElement, ArtifactPortalTargetProps>(
+export const DetailedViewPortalTarget = forwardRef<HTMLDivElement, DetailedViewPortalTargetProps>(
   ({ className }, ref) => {
-    const { setNode } = useArtifactPortalTarget();
+    const { setNode } = useDetailedViewPortalTarget();
     const forwardedRef = useRef(ref);
     forwardedRef.current = ref;
 
@@ -40,4 +40,4 @@ export const ArtifactPortalTarget = forwardRef<HTMLDivElement, ArtifactPortalTar
   },
 );
 
-ArtifactPortalTarget.displayName = "ArtifactPortalTarget";
+DetailedViewPortalTarget.displayName = "DetailedViewPortalTarget";

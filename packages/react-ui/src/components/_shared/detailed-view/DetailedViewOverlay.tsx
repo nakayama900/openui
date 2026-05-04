@@ -1,36 +1,36 @@
-import { useActiveArtifact } from "@openuidev/react-headless";
+import { useActiveDetailedView } from "@openuidev/react-headless";
 import clsx from "clsx";
 import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
 import { useMultipleRefs } from "../../../hooks/useMultipleRefs";
-import { ArtifactPortalTarget } from "./ArtifactPortalTarget";
+import { DetailedViewPortalTarget } from "./DetailedViewPortalTarget";
 
 /**
- * Props for {@link ArtifactOverlay}.
+ * Props for {@link DetailedViewOverlay}.
  *
  * @category Components
  */
-export type ArtifactOverlayProps = {
+export type DetailedViewOverlayProps = {
   /** Additional CSS class name(s) applied to the overlay container. */
   className?: string;
 };
 
 /**
- * Shared overlay wrapper for the artifact portal target.
+ * Shared overlay wrapper for the detailed-view portal target.
  * Used by CopilotShell, BottomTray, and Shell (mobile) layouts.
  * Renders an absolute-positioned overlay with slide-in/slide-out animations.
  *
  * @category Components
  */
-export const ArtifactOverlay = forwardRef<HTMLDivElement, ArtifactOverlayProps>(
+export const DetailedViewOverlay = forwardRef<HTMLDivElement, DetailedViewOverlayProps>(
   ({ className }, ref) => {
-    const { isArtifactActive } = useActiveArtifact();
-    const [shouldRender, setShouldRender] = useState(isArtifactActive);
+    const { isDetailedViewActive } = useActiveDetailedView();
+    const [shouldRender, setShouldRender] = useState(isDetailedViewActive);
     const [isExiting, setIsExiting] = useState(false);
     const internalRef = useRef<HTMLDivElement>(null);
     const mergedRef = useMultipleRefs<HTMLDivElement>(ref, internalRef);
 
     useEffect(() => {
-      if (isArtifactActive) {
+      if (isDetailedViewActive) {
         // Opening: mount immediately, cancel any in-progress exit
         setShouldRender(true);
         setIsExiting(false);
@@ -38,7 +38,7 @@ export const ArtifactOverlay = forwardRef<HTMLDivElement, ArtifactOverlayProps>(
         // Closing: start exit animation, defer unmount
         setIsExiting(true);
       }
-    }, [isArtifactActive]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [isDetailedViewActive]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleAnimationEnd = useCallback(
       (e: React.AnimationEvent<HTMLDivElement>) => {
@@ -58,16 +58,16 @@ export const ArtifactOverlay = forwardRef<HTMLDivElement, ArtifactOverlayProps>(
       <div
         ref={mergedRef}
         className={clsx(
-          "openui-artifact-overlay",
-          { "openui-artifact-overlay--exiting": isExiting },
+          "openui-detailed-view-overlay",
+          { "openui-detailed-view-overlay--exiting": isExiting },
           className,
         )}
         onAnimationEnd={handleAnimationEnd}
       >
-        <ArtifactPortalTarget />
+        <DetailedViewPortalTarget />
       </div>
     );
   },
 );
 
-ArtifactOverlay.displayName = "ArtifactOverlay";
+DetailedViewOverlay.displayName = "DetailedViewOverlay";

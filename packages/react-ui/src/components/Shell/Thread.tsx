@@ -1,11 +1,11 @@
 import type { AssistantMessage, Message, ToolMessage } from "@openuidev/react-headless";
-import { MessageProvider, useActiveArtifact, useThread } from "@openuidev/react-headless";
+import { MessageProvider, useActiveDetailedView, useThread } from "@openuidev/react-headless";
 import clsx from "clsx";
 import React, { memo, useRef } from "react";
 import { useLayoutContext } from "../../context/LayoutContext";
 import { ScrollVariant, useScrollToBottom } from "../../hooks/useScrollToBottom";
 import { separateContentAndContext } from "../../utils/contentParser";
-import { ArtifactOverlay, ArtifactPortalTarget } from "../_shared/artifact";
+import { DetailedViewOverlay, DetailedViewPortalTarget } from "../_shared/detailed-view";
 import { useShellStore } from "../_shared/store";
 import type { AssistantMessageComponent, UserMessageComponent } from "../_shared/types";
 import { Callout } from "../Callout";
@@ -14,7 +14,7 @@ import { MessageLoading as MessageLoadingComponent } from "../MessageLoading";
 import { ToolCallComponent } from "../ToolCall";
 import { ToolResult } from "../ToolResult";
 import { ResizableSeparator } from "./ResizableSeparator";
-import { useArtifactResize } from "./useArtifactResize";
+import { useDetailedViewResize } from "./useDetailedViewResize";
 
 export const ThreadContainer = ({
   children,
@@ -25,7 +25,7 @@ export const ThreadContainer = ({
 }) => {
   const { layout } = useLayoutContext();
   const isMobile = layout === "mobile";
-  const { isArtifactActive } = useActiveArtifact();
+  const { isDetailedViewActive } = useActiveDetailedView();
 
   const { setIsSidebarOpen } = useShellStore((state) => ({
     setIsSidebarOpen: state.setIsSidebarOpen,
@@ -36,13 +36,13 @@ export const ThreadContainer = ({
   const {
     containerRef,
     chatPanelRef,
-    artifactPanelRef,
+    detailedViewPanelRef,
     isDragging,
     handleResize,
     handleDragStart,
     handleDragEnd,
-  } = useArtifactResize({
-    isArtifactActive,
+  } = useDetailedViewResize({
+    isDetailedViewActive,
     isMobile,
     setIsSidebarOpen,
   });
@@ -50,7 +50,7 @@ export const ThreadContainer = ({
   return (
     <div
       className={clsx("openui-shell-thread-container", className, {
-        "openui-shell-thread-container--artifact-active": isArtifactActive,
+        "openui-shell-thread-container--detailed-view-active": isDetailedViewActive,
       })}
       style={{
         visibility: isLoadingMessages ? "hidden" : undefined,
@@ -65,11 +65,11 @@ export const ThreadContainer = ({
           })}
         >
           {children}
-          {isMobile && <ArtifactOverlay />}
+          {isMobile && <DetailedViewOverlay />}
         </div>
 
-        {/* Desktop only: Resizable separator and artifact panel */}
-        {!isMobile && isArtifactActive && (
+        {/* Desktop only: Resizable separator and detailed-view panel */}
+        {!isMobile && isDetailedViewActive && (
           <>
             <ResizableSeparator
               onResize={handleResize}
@@ -77,12 +77,12 @@ export const ThreadContainer = ({
               onDragEnd={handleDragEnd}
             />
             <div
-              ref={artifactPanelRef}
-              className={clsx("openui-shell-thread-artifact-panel", {
-                "openui-shell-thread-artifact-panel--animating": !isDragging,
+              ref={detailedViewPanelRef}
+              className={clsx("openui-shell-thread-detailed-view-panel", {
+                "openui-shell-thread-detailed-view-panel--animating": !isDragging,
               })}
             >
-              <ArtifactPortalTarget />
+              <DetailedViewPortalTarget />
             </div>
           </>
         )}

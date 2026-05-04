@@ -1,6 +1,6 @@
 @use "../../../cssUtils" as cssUtils;
 
-.openui-artifact-overlay {
+.openui-detailed-view-overlay {
   position: absolute;
   top: 0;
   left: 0;
@@ -8,14 +8,14 @@
   bottom: 0;
   z-index: 10;
   background-color: cssUtils.$foreground;
-  animation: openui-artifact-overlay-slide-in 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: openui-detailed-view-overlay-slide-in 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
   &--exiting {
-    animation: openui-artifact-overlay-slide-out 0.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: openui-detailed-view-overlay-slide-out 0.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   }
 }
 
-@keyframes openui-artifact-overlay-slide-in {
+@keyframes openui-detailed-view-overlay-slide-in {
   from {
     opacity: 0;
     transform: translateY(20px);
@@ -27,7 +27,7 @@
   }
 }
 
-@keyframes openui-artifact-overlay-slide-out {
+@keyframes openui-detailed-view-overlay-slide-out {
   from {
     opacity: 1;
     transform: translateY(0);

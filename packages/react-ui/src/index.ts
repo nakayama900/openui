@@ -2,22 +2,22 @@
 
 export * from "./components/Accordion";
 
-// Artifact() factory — generates a ComponentRenderer with artifact wiring
-export { Artifact } from "./artifact";
-export type { ArtifactConfig, ArtifactControls } from "./artifact";
+// DetailedView() factory — generates a ComponentRenderer with detailed-view wiring
+export { DetailedView } from "./detailed-view";
+export type { DetailedViewConfig, DetailedViewControls } from "./detailed-view";
 
-// Artifact exports (ArtifactPanel/ArtifactPortalTarget also available as Shell.*)
-export { useActiveArtifact, useArtifact } from "@openuidev/react-headless";
+// Detailed-view exports (DetailedViewPanel/DetailedViewPortalTarget also available as Shell.*)
+export { useActiveDetailedView, useDetailedView } from "@openuidev/react-headless";
 export {
-  ArtifactOverlay,
-  ArtifactPanel,
-  ArtifactPortalTarget,
-} from "./components/_shared/artifact";
+  DetailedViewOverlay,
+  DetailedViewPanel,
+  DetailedViewPortalTarget,
+} from "./components/_shared/detailed-view";
 export type {
-  ArtifactOverlayProps,
-  ArtifactPanelProps,
-  ArtifactPortalTargetProps,
-} from "./components/_shared/artifact";
+  DetailedViewOverlayProps,
+  DetailedViewPanelProps,
+  DetailedViewPortalTargetProps,
+} from "./components/_shared/detailed-view";
 
 export * from "./components/Button";
 export * from "./components/Buttons";

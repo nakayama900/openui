@@ -10,7 +10,7 @@ interface ResizableSeparatorProps {
 
 /**
  * A draggable vertical separator for resizing panels.
- * Used between chat and artifact panels in desktop mode.
+ * Used between chat and detailed-view panels in desktop mode.
  */
 export const ResizableSeparator = ({
   onResize,

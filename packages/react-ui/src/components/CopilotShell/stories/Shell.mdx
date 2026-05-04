@@ -134,12 +134,12 @@ The main wrapper for the CopilotShell sidebar.
 
 ### ThreadContainer
 
-Wrapper for the thread content with optional artifact panel support.
+Wrapper for the thread content with optional detailed-view panel support.
 
 ```tsx
 <ThreadContainer
-  isArtifactActive={false} // Show artifact panel
-  renderArtifact={() => <div />} // Artifact content
+  isDetailedViewActive={false} // Show detailed-view panel
+  renderDetailedView={() => <div />} // Detailed-view content
 >
   {children}
 </ThreadContainer>

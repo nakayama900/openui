@@ -165,12 +165,12 @@ The main tray panel. Controls visibility with `isOpen` prop.
 
 ### ThreadContainer
 
-Wrapper for thread content. Manages layout and artifact panels.
+Wrapper for thread content. Manages layout and detailed-view panels.
 
 ```tsx
 <ThreadContainer
-  isArtifactActive={false} // Show artifact panel
-  renderArtifact={() => <div />} // Artifact content
+  isDetailedViewActive={false} // Show detailed-view panel
+  renderDetailedView={() => <div />} // Detailed-view content
 >
   {children}
 </ThreadContainer>

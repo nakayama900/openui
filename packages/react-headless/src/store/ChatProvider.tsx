@@ -1,27 +1,37 @@
 import { useEffect, useState, type FC } from "react";
-import { ArtifactContext } from "./ArtifactContext";
 import { ChatContext } from "./ChatContext";
-import { createArtifactStore } from "./createArtifactStore";
 import { createChatStore } from "./createChatStore";
+import { createDetailedViewStore } from "./createDetailedViewStore";
+import { createThreadContextStore } from "./createThreadContextStore";
+import { DetailedViewContext } from "./DetailedViewContext";
+import { ThreadContextContext } from "./ThreadContextContext";
 import type { ChatProviderProps } from "./types";
 
 export const ChatProvider: FC<ChatProviderProps> = ({ children, ...config }) => {
   const [chatStore] = useState(() => createChatStore(config));
-  const [artifactStore] = useState(() => createArtifactStore());
+  const [detailedViewStore] = useState(() => createDetailedViewStore());
+  const [threadContextStore] = useState(() => createThreadContextStore());
 
-  // Cross-store subscription: reset artifacts when the active thread changes.
+  // Cross-store subscription: reset detailed-view + thread-context state when the active thread changes.
   // useEffect (not inline) so the cleanup function unsubscribes on unmount.
   useEffect(() => {
     const unsubscribe = chatStore.subscribe(
       (state) => state.selectedThreadId,
-      () => artifactStore.getState().resetArtifacts(),
+      () => {
+        detailedViewStore.getState().reset();
+        threadContextStore.getState().reset();
+      },
     );
     return unsubscribe;
-  }, [chatStore, artifactStore]);
+  }, [chatStore, detailedViewStore, threadContextStore]);
 
   return (
     <ChatContext.Provider value={chatStore}>
-      <ArtifactContext.Provider value={artifactStore}>{children}</ArtifactContext.Provider>
+      <DetailedViewContext.Provider value={detailedViewStore}>
+        <ThreadContextContext.Provider value={threadContextStore}>
+          {children}
+        </ThreadContextContext.Provider>
+      </DetailedViewContext.Provider>
     </ChatContext.Provider>
   );
 };

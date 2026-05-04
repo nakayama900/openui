@@ -20,8 +20,8 @@ $center-align-spacing: calc(32px + cssUtils.$space-s);
     padding: cssUtils.$space-2xl cssUtils.$space-l;
   }
 
-  // Artifact active adjustments
-  .openui-shell-thread-container--artifact-active & {
+  // Detailed-view active adjustments
+  .openui-shell-thread-container--detailed-view-active & {
     padding-left: 0;
     padding-right: cssUtils.$space-m;
   }

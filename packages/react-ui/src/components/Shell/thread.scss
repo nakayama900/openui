@@ -4,8 +4,8 @@
 // Thread Layout Structure
 // =============================================================================
 // The thread container uses a flexbox layout that supports both:
-// 1. Desktop: Resizable side-by-side chat and artifact panels
-// 2. Mobile: Full-width chat with absolute-positioned artifact overlay
+// 1. Desktop: Resizable side-by-side chat and detailed-view panels
+// 2. Mobile: Full-width chat with absolute-positioned detailed-view overlay
 
 .openui-shell-thread-container {
   flex: 1;
@@ -14,7 +14,7 @@
   flex-direction: column;
 }
 
-// Wrapper for horizontal layout (chat + separator + artifact)
+// Wrapper for horizontal layout (chat + separator + detailed view)
 .openui-shell-thread-wrapper {
   flex: 1;
   display: flex;
@@ -22,7 +22,7 @@
   height: 100%;
 }
 
-// Chat panel (left side on desktop, full-width when no artifact)
+// Chat panel (left side on desktop, full-width when no detailed view)
 .openui-shell-thread-chat-panel {
   display: flex;
   flex-direction: column;
@@ -37,8 +37,8 @@
   }
 }
 
-// Artifact panel (right side on desktop, fills remaining space)
-.openui-shell-thread-artifact-panel {
+// Detailed-view panel (right side on desktop, fills remaining space)
+.openui-shell-thread-detailed-view-panel {
   display: flex;
   flex-direction: column;
   overflow: auto;
@@ -142,8 +142,8 @@ $center-align-spacing: calc(32px + cssUtils.$space-s);
     padding: cssUtils.$space-l;
   }
 
-  // When artifact is active, reduce padding to maximize space
-  .openui-shell-thread-container--artifact-active & {
+  // When detailed view is active, reduce padding to maximize space
+  .openui-shell-thread-container--detailed-view-active & {
     padding-left: 0;
     padding-right: cssUtils.$space-m;
   }
@@ -178,8 +178,8 @@ $center-align-spacing: calc(32px + cssUtils.$space-s);
     padding: 0;
   }
 
-  // When artifact is active, minimize spacing and hide logo
-  .openui-shell-thread-container--artifact-active & {
+  // When detailed view is active, minimize spacing and hide logo
+  .openui-shell-thread-container--detailed-view-active & {
     gap: 0;
     padding-right: 0;
   }
@@ -210,7 +210,7 @@ $center-align-spacing: calc(32px + cssUtils.$space-s);
       display: none;
     }
 
-    .openui-shell-thread-container--artifact-active & {
+    .openui-shell-thread-container--detailed-view-active & {
       display: none;
     }
   }
@@ -225,7 +225,7 @@ $center-align-spacing: calc(32px + cssUtils.$space-s);
     padding: 0;
   }
 
-  .openui-shell-thread-container--artifact-active & {
+  .openui-shell-thread-container--detailed-view-active & {
     padding-left: 0;
     padding-right: 0;
   }

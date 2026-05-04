@@ -3,7 +3,7 @@ import { MessageProvider, useThread } from "@openuidev/react-headless";
 import clsx from "clsx";
 import React, { memo, useRef } from "react";
 import { ScrollVariant, useScrollToBottom } from "../../hooks/useScrollToBottom";
-import { ArtifactOverlay } from "../_shared/artifact";
+import { DetailedViewOverlay } from "../_shared/detailed-view";
 import type { AssistantMessageComponent, UserMessageComponent } from "../_shared/types";
 import { MarkDownRenderer } from "../MarkDownRenderer";
 import { MessageLoading as MessageLoadingComponent } from "../MessageLoading";
@@ -27,7 +27,7 @@ export const ThreadContainer = ({
       }}
     >
       {children}
-      <ArtifactOverlay />
+      <DetailedViewOverlay />
     </div>
   );
 };

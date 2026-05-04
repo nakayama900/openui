@@ -1,11 +1,14 @@
-export { useActiveArtifact } from "./hooks/useActiveArtifact";
-export { useArtifact } from "./hooks/useArtifact";
-export { useArtifactPortalTarget } from "./hooks/useArtifactPortalTarget";
+export { useActiveDetailedView } from "./hooks/useActiveDetailedView";
+export { useAppList } from "./hooks/useAppList";
+export { useArtifactList } from "./hooks/useArtifactList";
+export { useDetailedView } from "./hooks/useDetailedView";
+export { useDetailedViewPortalTarget } from "./hooks/useDetailedViewPortalTarget";
 export { MessageContext, MessageProvider, useMessage } from "./hooks/useMessage";
 export { useThread, useThreadList } from "./hooks/useThread";
 
-export { ArtifactContext, useArtifactStore } from "./store/ArtifactContext";
 export { ChatProvider } from "./store/ChatProvider";
+export { DetailedViewContext, useDetailedViewStore } from "./store/DetailedViewContext";
+export { ThreadContextContext, useThreadContextStore } from "./store/ThreadContextContext";
 export {
   agUIAdapter,
   langGraphAdapter,
@@ -20,7 +23,15 @@ export {
 } from "./stream/formats";
 export { processStreamedMessage } from "./stream/processStreamedMessage";
 
-export type { ArtifactActions, ArtifactState } from "./store/artifactTypes";
+export type { DetailedViewActions, DetailedViewState } from "./store/detailedViewTypes";
+
+export type {
+  AppEntry,
+  ArtifactEntry,
+  ThreadContextActions,
+  ThreadContextState,
+  ThreadContextStore,
+} from "./store/threadContextTypes";
 
 export type {
   ChatProviderProps,

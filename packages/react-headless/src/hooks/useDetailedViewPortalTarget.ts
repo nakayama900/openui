@@ -1,13 +1,13 @@
 import { useCallback } from "react";
 import { useStore } from "zustand";
-import { useArtifactStore } from "../store/ArtifactContext";
+import { useDetailedViewStore } from "../store/DetailedViewContext";
 
 /**
- * Provides access to the artifact portal target DOM node.
+ * Provides access to the detailed-view portal target DOM node.
  *
  * This hook serves two roles:
  * - **Registering a portal target:** Call `setNode` from a ref callback to
- *   designate a DOM element as the render target for artifact content.
+ *   designate a DOM element as the render target for detailed-view content.
  *   Only one target should be registered at a time.
  * - **Reading the portal target:** Read `node` to get the current target
  *   element for use with `createPortal()`.
@@ -21,26 +21,26 @@ import { useArtifactStore } from "../store/ArtifactContext";
  * ```tsx
  * // Registering a portal target
  * function MyPortalTarget() {
- *   const { setNode } = useArtifactPortalTarget();
+ *   const { setNode } = useDetailedViewPortalTarget();
  *   return <div ref={setNode} />;
  * }
  *
- * // Building a custom artifact panel
- * function MyArtifactPanel({ artifactId, children }) {
- *   const { isActive } = useArtifact(artifactId);
- *   const { node } = useArtifactPortalTarget();
+ * // Building a custom detailed-view panel
+ * function MyDetailedViewPanel({ viewId, children }) {
+ *   const { isActive } = useDetailedView(viewId);
+ *   const { node } = useDetailedViewPortalTarget();
  *   if (!isActive || !node) return null;
  *   return createPortal(<div>{children}</div>, node);
  * }
  * ```
  */
-export function useArtifactPortalTarget() {
-  const store = useArtifactStore();
-  const node = useStore(store, (s) => s._artifactPanelNode);
+export function useDetailedViewPortalTarget() {
+  const store = useDetailedViewStore();
+  const node = useStore(store, (s) => s._detailedViewPanelNode);
 
   const setNode = useCallback(
     (node: HTMLElement | null) => {
-      store.getState()._setArtifactPanelNode(node);
+      store.getState()._setDetailedViewPanelNode(node);
     },
     [store],
   );

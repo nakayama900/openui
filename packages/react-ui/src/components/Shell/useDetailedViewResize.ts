@@ -1,15 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-interface UseArtifactResizeProps {
-  isArtifactActive: boolean;
+interface UseDetailedViewResizeProps {
+  isDetailedViewActive: boolean;
   isMobile: boolean;
   setIsSidebarOpen: (isOpen: boolean) => void;
 }
 
-interface UseArtifactResizeReturn {
+interface UseDetailedViewResizeReturn {
   containerRef: React.RefObject<HTMLDivElement | null>;
   chatPanelRef: React.RefObject<HTMLDivElement | null>;
-  artifactPanelRef: React.RefObject<HTMLDivElement | null>;
+  detailedViewPanelRef: React.RefObject<HTMLDivElement | null>;
   isDragging: boolean;
   handleResize: (clientX: number) => void;
   handleDragStart: () => void;
@@ -21,40 +21,40 @@ const MIN_CHAT_WIDTH = 420;
 const MAX_CHAT_WIDTH_RATIO = 0.8;
 
 /**
- * Custom hook to manage artifact panel resizing logic (desktop only).
+ * Custom hook to manage detailed-view panel resizing logic (desktop only).
  * Handles:
  * - Chat panel width constraints
  * - Resize drag events
- * - Sidebar state when artifact is active/inactive
+ * - Sidebar state when detailed view is active/inactive
  */
-export const useArtifactResize = ({
-  isArtifactActive,
+export const useDetailedViewResize = ({
+  isDetailedViewActive,
   isMobile,
   setIsSidebarOpen,
-}: UseArtifactResizeProps): UseArtifactResizeReturn => {
+}: UseDetailedViewResizeProps): UseDetailedViewResizeReturn => {
   const [isDragging, setIsDragging] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const chatPanelRef = useRef<HTMLDivElement>(null);
-  const artifactPanelRef = useRef<HTMLDivElement>(null);
+  const detailedViewPanelRef = useRef<HTMLDivElement>(null);
 
-  // Handle sidebar visibility and panel widths when artifact state changes
+  // Handle sidebar visibility and panel widths when detailed-view state changes
   useEffect(() => {
     if (isMobile) return;
 
-    if (isArtifactActive) {
-      // Desktop artifact active: close sidebar and set chat width to 420px
+    if (isDetailedViewActive) {
+      // Desktop view active: close sidebar and set chat width to 420px
       setIsSidebarOpen(false);
       if (chatPanelRef.current) {
         chatPanelRef.current.style.width = `${INITIAL_CHAT_WIDTH}px`;
       }
     } else {
-      // Desktop artifact inactive: open sidebar and reset chat width
+      // Desktop view inactive: open sidebar and reset chat width
       setIsSidebarOpen(true);
       if (chatPanelRef.current) {
         chatPanelRef.current.style.width = "100%";
       }
     }
-  }, [isArtifactActive, isMobile, setIsSidebarOpen]);
+  }, [isDetailedViewActive, isMobile, setIsSidebarOpen]);
 
   const handleResize = useCallback((clientX: number) => {
     if (!containerRef.current || !chatPanelRef.current) return;
@@ -80,7 +80,7 @@ export const useArtifactResize = ({
   return {
     containerRef,
     chatPanelRef,
-    artifactPanelRef,
+    detailedViewPanelRef,
     isDragging,
     handleResize,
     handleDragStart,

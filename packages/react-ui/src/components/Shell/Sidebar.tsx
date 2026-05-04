@@ -1,4 +1,4 @@
-import { useActiveArtifact } from "@openuidev/react-headless";
+import { useActiveDetailedView } from "@openuidev/react-headless";
 import clsx from "clsx";
 import { ArrowLeftFromLine, ArrowRightFromLine } from "lucide-react";
 import { useEffect } from "react";
@@ -17,7 +17,7 @@ export const SidebarContainer = ({
     isSidebarOpen: state.isSidebarOpen,
     setIsSidebarOpen: state.setIsSidebarOpen,
   }));
-  const { isArtifactActive } = useActiveArtifact();
+  const { isDetailedViewActive } = useActiveDetailedView();
   const { layout } = useLayoutContext() || {};
   const isMobile = layout === "mobile";
 
@@ -46,7 +46,7 @@ export const SidebarContainer = ({
           "openui-shell-sidebar-container",
           {
             "openui-shell-sidebar-container--collapsed": !isSidebarOpen,
-            "openui-shell-sidebar-container--hidden": isArtifactActive && !isMobile,
+            "openui-shell-sidebar-container--hidden": isDetailedViewActive && !isMobile,
           },
           className,
         )}

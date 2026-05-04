@@ -1,6 +1,6 @@
 @use "../../../cssUtils" as cssUtils;
 
-.openui-artifact-panel__header {
+.openui-detailed-view-panel__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -13,7 +13,7 @@
   z-index: 1;
 }
 
-.openui-artifact-panel__title {
+.openui-detailed-view-panel__title {
   @include cssUtils.typography(body, default);
   color: cssUtils.$text-neutral-primary;
   overflow: hidden;
@@ -22,7 +22,7 @@
   min-width: 0;
 }
 
-.openui-artifact-panel__close {
+.openui-detailed-view-panel__close {
   display: flex;
   align-items: center;
   justify-content: center;

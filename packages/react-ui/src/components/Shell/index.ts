@@ -1,4 +1,4 @@
-export * from "../_shared/artifact";
+export * from "../_shared/detailed-view";
 export * from "../_shared/store";
 export * from "./components";
 export * from "./Container";
