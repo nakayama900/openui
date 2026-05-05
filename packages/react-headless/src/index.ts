@@ -1,11 +1,14 @@
 export { useActiveDetailedView } from "./hooks/useActiveDetailedView";
 export { useAppList } from "./hooks/useAppList";
+export { useAppRenderer } from "./hooks/useAppRenderer";
 export { useArtifactList } from "./hooks/useArtifactList";
 export { useDetailedView } from "./hooks/useDetailedView";
 export { useDetailedViewPortalTarget } from "./hooks/useDetailedViewPortalTarget";
 export { MessageContext, MessageProvider, useMessage } from "./hooks/useMessage";
 export { useThread, useThreadList } from "./hooks/useThread";
 
+export { AppRenderersContext, useAppRendererRegistry } from "./store/AppRenderersContext";
+export { defineAppRenderer } from "./store/appRendererTypes";
 export { ChatProvider } from "./store/ChatProvider";
 export { DetailedViewContext, useDetailedViewStore } from "./store/DetailedViewContext";
 export { ThreadContextContext, useThreadContextStore } from "./store/ThreadContextContext";
@@ -22,6 +25,8 @@ export {
   openAIMessageFormat,
 } from "./stream/formats";
 export { processStreamedMessage } from "./stream/processStreamedMessage";
+
+export type { AppRendererConfig, AppRendererControls } from "./store/appRendererTypes";
 
 export type { DetailedViewActions, DetailedViewState } from "./store/detailedViewTypes";
 

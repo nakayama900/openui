@@ -5,6 +5,7 @@ import React, { memo, useRef } from "react";
 import { useLayoutContext } from "../../context/LayoutContext";
 import { ScrollVariant, useScrollToBottom } from "../../hooks/useScrollToBottom";
 import { separateContentAndContext } from "../../utils/contentParser";
+import { ToolMessageRenderer } from "../_shared/app-renderer";
 import { DetailedViewOverlay, DetailedViewPortalTarget } from "../_shared/detailed-view";
 import { useShellStore } from "../_shared/store";
 import type { AssistantMessageComponent, UserMessageComponent } from "../_shared/types";
@@ -182,12 +183,6 @@ const AssistantMessageContent = ({
   message: AssistantMessage;
   allMessages: Message[];
 }) => {
-  // Find tool result messages that correspond to this message's tool calls
-  const getToolName = (toolCallId: string) => {
-    const toolCall = message.toolCalls?.find((tc) => tc.id === toolCallId);
-    return toolCall?.function.name;
-  };
-
   // Collect tool messages that follow this assistant message
   const toolMessages: ToolMessage[] = [];
   const msgIndex = allMessages.findIndex((m) => m.id === message.id);
@@ -213,9 +208,19 @@ const AssistantMessageContent = ({
       {message.toolCalls?.map((toolCall) => (
         <ToolCallComponent key={toolCall.id} toolCall={toolCall} />
       ))}
-      {toolMessages.map((tm) => (
-        <ToolResult key={tm.id} message={tm} toolName={getToolName(tm.toolCallId)} />
-      ))}
+      {toolMessages.map((tm) => {
+        const toolCall = message.toolCalls?.find((tc) => tc.id === tm.toolCallId);
+        const fallback = <ToolResult message={tm} toolName={toolCall?.function.name} />;
+        if (!toolCall) return <span key={tm.id}>{fallback}</span>;
+        return (
+          <ToolMessageRenderer
+            key={tm.id}
+            toolMessage={tm}
+            toolCall={toolCall}
+            fallback={fallback}
+          />
+        );
+      })}
     </>
   );
 };

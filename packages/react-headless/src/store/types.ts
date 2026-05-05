@@ -1,6 +1,7 @@
 import type { Message, UserMessage } from "../types/message";
 import type { MessageFormat } from "../types/messageFormat";
 import type { StreamProtocolAdapter } from "../types/stream";
+import type { AppRendererConfig } from "./appRendererTypes";
 
 export type { Message, UserMessage } from "../types/message";
 export type CreateMessage = Omit<UserMessage, "id">;
@@ -100,5 +101,11 @@ export type ChatProviderProps = ThreadApiConfig &
   ChatApiConfig & {
     streamProtocol?: StreamProtocolAdapter;
     messageFormat?: MessageFormat;
+    /**
+     * App renderers matched against tool calls in the conversation.
+     * Captured at mount; subsequent prop changes are ignored (dev warning).
+     * Order is priority: first match wins on duplicate `toolName`.
+     */
+    appRenderers?: ReadonlyArray<AppRendererConfig<unknown>>;
     children: React.ReactNode;
   };

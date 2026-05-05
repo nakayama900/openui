@@ -1,3 +1,4 @@
+export * from "./app-renderer";
 export * from "./detailed-view";
 export * from "./store";
 export * from "./types";

@@ -6,6 +6,12 @@ export * from "./components/Accordion";
 export { DetailedView } from "./detailed-view";
 export type { DetailedViewConfig, DetailedViewControls } from "./detailed-view";
 
+// ToolMessageRenderer — dispatches tool results to matching AppRenderers
+export {
+  ToolMessageRenderer,
+  type ToolMessageRendererProps,
+} from "./components/_shared/app-renderer";
+
 // Detailed-view exports (DetailedViewPanel/DetailedViewPortalTarget also available as Shell.*)
 export { useActiveDetailedView, useDetailedView } from "@openuidev/react-headless";
 export {
