@@ -32,6 +32,7 @@ const CHAT_PROVIDER_PROP_KEYS: Set<keyof Omit<ChatProviderProps, "children">> = 
   "loadThread",
   "streamProtocol",
   "messageFormat",
+  "appRenderers",
 ]);
 
 export function withChatProvider<ExtraProps = {}>(WrappedComponent: React.ComponentType<any>) {

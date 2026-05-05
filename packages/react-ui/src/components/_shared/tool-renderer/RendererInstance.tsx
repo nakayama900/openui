@@ -8,12 +8,13 @@ import { useEffect, useId, useMemo } from "react";
 import { DetailedViewPanel } from "../detailed-view";
 
 /**
- * Renders a matched AppRenderer for a single tool call/response.
+ * Renders a matched renderer (app or artifact) for a single tool call/response.
  *
  * Lifecycle:
  * 1. Run `parser({ args, response })` to derive Props.
  * 2. Run `meta(props, ctx)` to derive ThreadContext entry.
  * 3. If meta returns non-null, register the entry on mount; unregister on unmount.
+ *    The `kind` field on the renderer routes to apps (default) or artifacts.
  * 4. Render `preview(props, controls)` inline + `<DetailedViewPanel>` containing
  *    `actual(props, controls)` for the side panel.
  *
@@ -25,7 +26,7 @@ import { DetailedViewPanel } from "../detailed-view";
  *
  * @internal
  */
-export function AppRendererInstance<Props>({
+export function RendererInstance<Props>({
   renderer,
   args,
   response,
@@ -49,14 +50,20 @@ export function AppRendererInstance<Props>({
   const viewId = meta ? `${meta.id}:${meta.version}` : fallbackId;
 
   // Register entry on mount; unregister on unmount or when (id, version) changes.
-  // Heading-only changes upsert via the store's idempotent registerApp.
+  // The `kind` field on the renderer routes to the correct ThreadContext slice
+  // (apps for `defineAppRenderer`, artifacts for `defineArtifactRenderer`).
+  // Heading-only changes upsert via the store's idempotent register* actions.
+  const kind = renderer.kind ?? "app";
   useEffect(() => {
     if (!meta) return;
-    tcStore.getState().registerApp(meta);
-    return () => {
-      tcStore.getState().unregisterApp(meta.id, meta.version);
-    };
-  }, [tcStore, meta?.id, meta?.version, meta?.heading]); // eslint-disable-line react-hooks/exhaustive-deps
+    const state = tcStore.getState();
+    if (kind === "artifact") {
+      state.registerArtifact(meta);
+      return () => tcStore.getState().unregisterArtifact(meta.id, meta.version);
+    }
+    state.registerApp(meta);
+    return () => tcStore.getState().unregisterApp(meta.id, meta.version);
+  }, [tcStore, kind, meta?.id, meta?.version, meta?.heading]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const { isActive, open, close, toggle } = useDetailedView(viewId);
 

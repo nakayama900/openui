@@ -28,7 +28,7 @@ export type AppRendererRegistry = {
  * @internal
  */
 export function buildAppRendererRegistry(
-  configs: ReadonlyArray<AppRendererConfig<unknown>>,
+  configs: ReadonlyArray<AppRendererConfig<any>>,
 ): AppRendererRegistry {
   const literal = new Map<string, AppRendererConfig<unknown>>();
   const regex: AppRendererConfig<unknown>[] = [];

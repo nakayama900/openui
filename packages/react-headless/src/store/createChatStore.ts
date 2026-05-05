@@ -254,8 +254,6 @@ export const createChatStore = (config: StoreConfig) => {
               set((s) => ({
                 messages: s.messages.map((m) => (m.id === msg.id ? msg : m)),
               })),
-            deleteMessage: (id) =>
-              set((s) => ({ messages: s.messages.filter((m) => m.id !== id) })),
             adapter: streamProtocol,
           });
         } catch (e) {

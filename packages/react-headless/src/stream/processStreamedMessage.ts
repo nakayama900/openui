@@ -1,4 +1,4 @@
-import { AssistantMessage, EventType, StreamProtocolAdapter } from "../types";
+import { AssistantMessage, EventType, Message, StreamProtocolAdapter, ToolMessage } from "../types";
 import { agUIAdapter } from "./adapters";
 
 /**
@@ -6,12 +6,10 @@ import { agUIAdapter } from "./adapters";
  */
 interface Parameters {
   response: Response;
-  /** A function that creates a new assistant message in the thread */
-  createMessage: (message: AssistantMessage) => void;
+  /** A function that creates a new message in the thread (assistant or tool). */
+  createMessage: (message: Message) => void;
   /** A function that updates an existing assistant message in the thread */
   updateMessage: (message: AssistantMessage) => void;
-  /** A function that deletes an assistant message from the thread */
-  deleteMessage: (messageId: string) => void;
   /** The adapter to use for parsing the stream */
   adapter?: StreamProtocolAdapter;
 }
@@ -23,7 +21,6 @@ export const processStreamedMessage = async ({
   response,
   createMessage,
   updateMessage,
-  deleteMessage,
   adapter = agUIAdapter(),
 }: Parameters): Promise<AssistantMessage | void> => {
   let currentMessage: AssistantMessage = {
@@ -96,13 +93,26 @@ export const processStreamedMessage = async ({
         break;
 
       case EventType.TEXT_MESSAGE_START:
-        // Use the ID from the event if it differs from our optimistic ID
-        if (event.messageId !== currentMessage.id) {
-          deleteMessage(currentMessage.id);
-          currentMessage = { ...currentMessage, id: event.messageId };
-          isFirst = true; // Will trigger createMessage with new ID
-        }
+        // The optimistic id is kept regardless of `event.messageId` — swapping
+        // ids mid-stream by deleting + re-creating the assistant message
+        // breaks ordering when tool messages have already been appended
+        // between the original create and this event (e.g. from
+        // TOOL_CALL_RESULT). Persistence layers should map ids on save.
         break;
+
+      case EventType.TOOL_CALL_RESULT: {
+        // Append a tool message to the thread for this tool call.
+        // The current assistant message (with its toolCalls) is preserved as-is;
+        // subsequent text/tool-call events keep updating it.
+        const toolMessage: ToolMessage = {
+          id: crypto.randomUUID(),
+          role: "tool",
+          toolCallId: event.toolCallId,
+          content: event.content,
+        };
+        createMessage(toolMessage);
+        continue; // skip the trailing isFirst/update logic — this event doesn't touch currentMessage
+      }
 
       case EventType.RUN_ERROR: {
         const msg = (event as any).message || (event as any).error || "Stream error";

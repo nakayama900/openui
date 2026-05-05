@@ -106,6 +106,6 @@ export type ChatProviderProps = ThreadApiConfig &
      * Captured at mount; subsequent prop changes are ignored (dev warning).
      * Order is priority: first match wins on duplicate `toolName`.
      */
-    appRenderers?: ReadonlyArray<AppRendererConfig<unknown>>;
+    appRenderers?: ReadonlyArray<AppRendererConfig<any>>;
     children: React.ReactNode;
   };

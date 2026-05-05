@@ -1,14 +1,15 @@
 # OpenUI Artifact Demo
 
-A demo application showcasing the OpenUI artifact system for displaying generated code in a resizable side panel.
+A demo application showcasing the new `defineAppRenderer` API: tool calls map to
+custom inline previews + a resizable detailed-view side panel.
 
 ## Features
 
-- **Artifact Code Blocks**: AI-generated code appears as compact previews in chat
-- **Side Panel**: Click "View Code" to open the full code in a resizable artifact panel
-- **Syntax Highlighting**: Full Prism-based syntax highlighting in the artifact panel
-- **Multiple Artifacts**: Multiple code blocks per conversation, one active at a time
-- **Copy to Clipboard**: One-click code copying from the artifact panel
+- **Code blocks via tool calls**: AI emits a `create_code_block` tool call instead of an openui-lang component.
+- **Inline preview**: Compact code preview rendered in the chat for each call.
+- **Detailed-view side panel**: Click "View Code" to open the full code with syntax highlighting.
+- **Artifacts registry**: Each rendered code block registers in ThreadContext (artifacts list) keyed by filename.
+- **Multiple files per response**: One tool call per file; multiple calls render multiple panels.
 
 ## Getting Started
 
@@ -24,23 +25,28 @@ pnpm --filter openui-artifact-demo dev
 ```
 
 Set your OpenAI API key:
+
 ```bash
 export OPENAI_API_KEY=your-key-here
 ```
 
 ## How It Works
 
-This example extends the standard OpenUI chat library with a custom `ArtifactCodeBlock` component that integrates with the OpenUI artifact system:
-
 1. User asks for code (e.g., "Build me a React login form")
-2. AI generates a response using `ArtifactCodeBlock` components
-3. Each code block shows an inline preview in the chat
-4. Clicking "View Code" opens the full code in the artifact side panel
-5. The panel is resizable and supports syntax highlighting + copy
+2. AI emits a `create_code_block` tool call with `{ language, title, codeString }`
+3. Backend's agentic loop (`runTools`) executes the (declarative) tool — it just returns `{ ok: true }`
+4. Backend forwards the tool call + result to the client over SSE, with the result enriched into the args envelope as `{ _request, _response }`
+5. Client's `enrichedArgsAdapter` unpacks the envelope into proper `TOOL_CALL_ARGS` + `TOOL_CALL_RESULT` events
+6. `processStreamedMessage` creates a `ToolMessage` for the result
+7. `ToolMessageRenderer` matches `create_code_block` against the `appRenderers` array, dispatches to `codeBlockRenderer`
+8. The renderer's `parser` validates the args, `meta` registers the entry in ThreadContext, `preview` renders the inline card, `actual` renders the side panel content via `DetailedViewPanel`
 
 ## Architecture
 
-- `src/components/ArtifactCodeBlock/` — Custom genui component with inline preview and artifact panel view
-- `src/library.ts` — Extended component library with ArtifactCodeBlock
-- `src/app/page.tsx` — Main page using FullScreen layout
-- `src/app/api/chat/route.ts` — API route for OpenAI streaming
+- `src/lib/codeBlockRenderer.tsx` — `defineAppRenderer` config wiring parser + meta + preview + actual
+- `src/lib/enrichedArgsAdapter.ts` — Custom stream adapter that splits the example's `{_request, _response}` envelope into standard events
+- `src/components/ArtifactCodeBlock/InlinePreview.tsx` — Inline preview component (reused as the renderer's `preview`)
+- `src/components/ArtifactCodeBlock/ArtifactView.tsx` — Side-panel content (reused as the renderer's `actual`)
+- `src/library.ts` — Re-exports the standard chat library + adds prompt rules instructing the LLM to use the `create_code_block` tool
+- `src/app/page.tsx` — `FullScreen` layout wired with `appRenderers={[codeBlockRenderer]}` and the custom adapter
+- `src/app/api/chat/route.ts` — OpenAI route with `create_code_block` registered as a tool

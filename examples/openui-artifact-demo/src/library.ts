@@ -1,55 +1,37 @@
-import type { ComponentGroup, PromptOptions } from "@openuidev/react-lang";
-import { createLibrary } from "@openuidev/react-lang";
-import {
-  openuiChatComponentGroups,
-  openuiChatLibrary,
-  openuiChatPromptOptions,
-} from "@openuidev/react-ui/genui-lib";
+import type { PromptOptions } from "@openuidev/react-lang";
+import { openuiChatLibrary, openuiChatPromptOptions } from "@openuidev/react-ui/genui-lib";
 
-import { ArtifactCodeBlock } from "./components/ArtifactCodeBlock";
+// ── Library ──
+//
+// Code blocks are no longer registered as openui-lang components; they are
+// rendered via the `create_code_block` tool call (see `lib/codeBlockRenderer`)
+// and dispatched by `ToolMessageRenderer` in react-ui. The library stays as
+// the standard chat library — it still handles all non-code response shapes
+// (TextContent, FollowUpBlock, etc.).
 
-// ── Component Groups — extend chat groups, add ArtifactCodeBlock to Content ──
+export const artifactDemoLibrary = openuiChatLibrary;
 
-const artifactComponentGroups: ComponentGroup[] = openuiChatComponentGroups.map((group) => {
-  if (group.name === "Content") {
-    return {
-      ...group,
-      components: [...group.components, "ArtifactCodeBlock"],
-    };
-  }
-  return group;
-});
-
-// ── Library — all chat components + ArtifactCodeBlock ──
-
-export const artifactDemoLibrary = createLibrary({
-  root: "Card",
-  componentGroups: artifactComponentGroups,
-  components: [...Object.values(openuiChatLibrary.components), ArtifactCodeBlock],
-});
-
-// ── Prompt Options — extend chat rules with artifact-specific instructions ──
+// ── Prompt options — instruct the LLM to use the tool for code ──
 
 export const artifactDemoPromptOptions: PromptOptions = {
+  ...openuiChatPromptOptions,
+  // Override the default preamble — the chat library's default says "ENTIRE
+  // response must be valid openui-lang code", which suppresses tool calls.
+  // For this example we want both: openui-lang for chat content + tool calls
+  // for code blocks rendered via defineAppRenderer.
+  preamble:
+    "You are an AI assistant that responds with TWO INDEPENDENT channels:\n" +
+    "1. **openui-lang** — for chat content (intro text, explanations, follow-ups). Must be valid openui-lang starting with `root = Card([...])`.\n" +
+    "2. **Tool calls** — for code output via the `create_code_block` tool. Tool calls happen via the OpenAI tools API, separately from openui-lang.\n\n" +
+    "Both channels can appear in the same response. Code goes in tool calls; surrounding chat goes in openui-lang. NEVER reference a tool call from inside openui-lang.",
   additionalRules: [
     ...(openuiChatPromptOptions.additionalRules ?? []),
-    "ALWAYS use ArtifactCodeBlock for ANY code output. NEVER use regular CodeBlock.",
-    "Set title to the filename (e.g. 'LoginForm.tsx', 'sort.py', 'schema.sql').",
-    "Set language to the correct syntax highlighting language (e.g. 'typescript', 'python', 'sql', 'css').",
-    "You can include multiple ArtifactCodeBlocks in one response — each with a unique title.",
-    "Surround code blocks with TextContent for explanations.",
-  ],
-  examples: [
-    ...(openuiChatPromptOptions.examples ?? []),
-    `Example — Code generation with artifacts:
-root = Card([intro, code1, explanation, code2, followUps])
-intro = TextContent("Here's a React login form with validation:", "default")
-code1 = ArtifactCodeBlock("typescript", "LoginForm.tsx", "import React, { useState } from 'react';\\n\\nexport function LoginForm() {\\n  const [email, setEmail] = useState('');\\n  const [password, setPassword] = useState('');\\n\\n  return (\\n    <form>\\n      <input value={email} onChange={e => setEmail(e.target.value)} />\\n      <input type=\\"password\\" value={password} onChange={e => setPassword(e.target.value)} />\\n      <button type=\\"submit\\">Login</button>\\n    </form>\\n  );\\n}")
-explanation = TextContent("And the validation helper:", "default")
-code2 = ArtifactCodeBlock("typescript", "validate.ts", "export function validateEmail(email: string): boolean {\\n  return /^[^\\\\s@]+@[^\\\\s@]+\\\\.[^\\\\s@]+$/.test(email);\\n}")
-followUps = FollowUpBlock([fu1, fu2])
-fu1 = FollowUpItem("Add password strength indicator")
-fu2 = FollowUpItem("Add form styling with Tailwind")`,
+    "Tool calls and openui-lang are INDEPENDENT response channels. Emit them in parallel; do NOT reference tool calls from openui-lang.",
+    "For ANY code output, emit a `create_code_block` tool call. NEVER put code inside TextContent, MarkdownBlock, or any openui-lang component. NEVER add a forward reference like `code = ...` for code blocks — they live entirely in the tool call.",
+    "Set `title` to the filename (e.g. 'LoginForm.tsx', 'sort.py', 'schema.sql'). Set `language` to the syntax-highlighting language (e.g. 'typescript', 'python', 'sql', 'css').",
+    "Call the tool once per file. For multiple files, emit multiple tool calls in a single response.",
+    "openui-lang is for the SURROUNDING chat (intro text, brief explanations, follow-up suggestions). Use TextContent + FollowUpBlock as needed. Example shape when responding with code: `root = Card([intro, followUps])` plus one or more parallel `create_code_block` tool calls.",
+    "If your only response is code (no surrounding text), emit ONLY the tool call(s) — no openui-lang at all.",
   ],
 };
 

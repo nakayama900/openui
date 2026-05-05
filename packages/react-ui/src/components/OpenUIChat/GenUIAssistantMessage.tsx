@@ -6,6 +6,7 @@ import type { ActionEvent, Library } from "@openuidev/react-lang";
 import { BuiltinActionType, Renderer } from "@openuidev/react-lang";
 import { useCallback, useMemo } from "react";
 import { separateContentAndContext, wrapContent, wrapContext } from "../../utils/contentParser";
+import { ToolMessageRenderer } from "../_shared/tool-renderer";
 import { AssistantMessageContainer } from "../Shell";
 import { BehindTheScenes, ToolCallComponent } from "../ToolCall";
 import { ToolResult } from "../ToolResult";
@@ -110,6 +111,19 @@ export const GenUIAssistantMessage = ({
     [processMessage],
   );
 
+  // Partition tool messages: those handled by an AppRenderer render *outside*
+  // the BehindTheScenes panel via ToolMessageRenderer (matching by toolName).
+  // The rest fall back to the default ToolResult inside BehindTheScenes.
+  const dispatchableToolMessages = toolMessages
+    .map((tm) => {
+      const toolCall = message.toolCalls?.find((tc) => tc.id === tm.toolCallId);
+      return toolCall ? { tm, toolCall } : null;
+    })
+    .filter(
+      (x): x is { tm: ToolMessage; toolCall: NonNullable<typeof message.toolCalls>[number] } =>
+        x !== null,
+    );
+
   const hasToolActivity =
     (message.toolCalls && message.toolCalls.length > 0) || toolMessages.length > 0;
 
@@ -131,6 +145,16 @@ export const GenUIAssistantMessage = ({
           ))}
         </BehindTheScenes>
       )}
+      {dispatchableToolMessages.map(({ tm, toolCall }) => (
+        <ToolMessageRenderer
+          key={tm.id}
+          toolMessage={tm}
+          toolCall={toolCall}
+          // No fallback — when the renderer doesn't match, render nothing here;
+          // the default ToolResult is still shown inside BehindTheScenes above.
+          fallback={null}
+        />
+      ))}
       <Renderer
         response={openuiCode}
         library={library}

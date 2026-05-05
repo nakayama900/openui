@@ -10,7 +10,7 @@ export type { DetailedViewConfig, DetailedViewControls } from "./detailed-view";
 export {
   ToolMessageRenderer,
   type ToolMessageRendererProps,
-} from "./components/_shared/app-renderer";
+} from "./components/_shared/tool-renderer";
 
 // Detailed-view exports (DetailedViewPanel/DetailedViewPortalTarget also available as Shell.*)
 export { useActiveDetailedView, useDetailedView } from "@openuidev/react-headless";

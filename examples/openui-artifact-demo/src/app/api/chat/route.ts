@@ -85,6 +85,13 @@ function searchWeb({ query }: { query: string }): Promise<string> {
   });
 }
 
+// `create_code_block` is a declarative tool — the LLM emits the call to render
+// a code block in the chat; there's nothing to execute server-side. Returning
+// `{ ok: true }` satisfies the agentic loop so the LLM continues with text.
+function createCodeBlock(): Promise<string> {
+  return Promise.resolve(JSON.stringify({ ok: true }));
+}
+
 // ── Tool definitions ──
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -142,6 +149,34 @@ const tools: any[] = [
         required: ["query"],
       },
       function: searchWeb,
+      parse: JSON.parse,
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "create_code_block",
+      description:
+        "Render a code block with syntax highlighting in the chat. Use for ANY code output — never put code inside text content. One call per file.",
+      parameters: {
+        type: "object",
+        properties: {
+          language: {
+            type: "string",
+            description: "Syntax highlighting language (e.g. 'typescript', 'python', 'sql', 'css').",
+          },
+          title: {
+            type: "string",
+            description: "Filename or short title (e.g. 'LoginForm.tsx', 'sort.py').",
+          },
+          codeString: {
+            type: "string",
+            description: "The code content to render.",
+          },
+        },
+        required: ["language", "title", "codeString"],
+      },
+      function: createCodeBlock,
       parse: JSON.parse,
     },
   },

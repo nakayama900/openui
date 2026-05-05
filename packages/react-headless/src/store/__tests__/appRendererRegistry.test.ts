@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { buildAppRendererRegistry, lookupAppRenderer } from "../AppRenderersContext";
-import { defineAppRenderer } from "../appRendererTypes";
+import { defineAppRenderer, defineArtifactRenderer } from "../appRendererTypes";
 
 const makeRenderer = (toolName: string | RegExp, label = String(toolName)) =>
   defineAppRenderer({
@@ -77,6 +77,31 @@ describe("buildAppRendererRegistry", () => {
 
       expect(warnSpy).not.toHaveBeenCalled();
     });
+  });
+});
+
+describe("defineAppRenderer / defineArtifactRenderer", () => {
+  const baseConfig = {
+    toolName: "tool",
+    parser: () => ({ x: 1 }),
+    meta: () => ({ id: "x", version: 1, heading: "X" }),
+    preview: () => null,
+    actual: () => null,
+  };
+
+  it("defineAppRenderer tags kind as 'app'", () => {
+    expect(defineAppRenderer(baseConfig).kind).toBe("app");
+  });
+
+  it("defineArtifactRenderer tags kind as 'artifact'", () => {
+    expect(defineArtifactRenderer(baseConfig).kind).toBe("artifact");
+  });
+
+  it("preserves all other config fields", () => {
+    const r = defineArtifactRenderer({ ...baseConfig, toolName: /^x/ });
+    expect(r.toolName).toEqual(/^x/);
+    expect(r.parser).toBe(baseConfig.parser);
+    expect(r.meta).toBe(baseConfig.meta);
   });
 });
 

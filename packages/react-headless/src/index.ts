@@ -8,7 +8,7 @@ export { MessageContext, MessageProvider, useMessage } from "./hooks/useMessage"
 export { useThread, useThreadList } from "./hooks/useThread";
 
 export { AppRenderersContext, useAppRendererRegistry } from "./store/AppRenderersContext";
-export { defineAppRenderer } from "./store/appRendererTypes";
+export { defineAppRenderer, defineArtifactRenderer } from "./store/appRendererTypes";
 export { ChatProvider } from "./store/ChatProvider";
 export { DetailedViewContext, useDetailedViewStore } from "./store/DetailedViewContext";
 export { ThreadContextContext, useThreadContextStore } from "./store/ThreadContextContext";
@@ -26,7 +26,11 @@ export {
 } from "./stream/formats";
 export { processStreamedMessage } from "./stream/processStreamedMessage";
 
-export type { AppRendererConfig, AppRendererControls } from "./store/appRendererTypes";
+export type {
+  AppRendererConfig,
+  AppRendererControls,
+  AppRendererKind,
+} from "./store/appRendererTypes";
 
 export type { DetailedViewActions, DetailedViewState } from "./store/detailedViewTypes";
 

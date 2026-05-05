@@ -2,9 +2,11 @@
 import "@openuidev/react-ui/components.css";
 
 import { useTheme } from "@/hooks/use-system-theme";
-import { openAIAdapter, openAIMessageFormat } from "@openuidev/react-headless";
-import { FullScreen } from "@openuidev/react-ui";
+import { codeBlockRenderer } from "@/lib/codeBlockRenderer";
+import { enrichedArgsAdapter } from "@/lib/enrichedArgsAdapter";
 import { artifactDemoLibrary } from "@/library";
+import { openAIMessageFormat } from "@openuidev/react-headless";
+import { FullScreen } from "@openuidev/react-ui";
 
 export default function Page() {
   const mode = useTheme();
@@ -22,8 +24,9 @@ export default function Page() {
             signal: abortController.signal,
           });
         }}
-        streamProtocol={openAIAdapter()}
+        streamProtocol={enrichedArgsAdapter()}
         componentLibrary={artifactDemoLibrary}
+        appRenderers={[codeBlockRenderer]}
         agentName="Artifact Demo"
         theme={{ mode }}
         conversationStarters={{
@@ -31,23 +34,19 @@ export default function Page() {
           options: [
             {
               displayText: "React login form",
-              prompt:
-                "Build me a React login form with email and password validation",
+              prompt: "Build me a React login form with email and password validation",
             },
             {
               displayText: "Python REST API",
-              prompt:
-                "Create a FastAPI REST API with CRUD endpoints for a todo app",
+              prompt: "Create a FastAPI REST API with CRUD endpoints for a todo app",
             },
             {
               displayText: "CSS animation",
-              prompt:
-                "Write a CSS animation for a bouncing loading indicator",
+              prompt: "Write a CSS animation for a bouncing loading indicator",
             },
             {
               displayText: "SQL schema",
-              prompt:
-                "Design a SQL schema for a blog with users, posts, and comments",
+              prompt: "Design a SQL schema for a blog with users, posts, and comments",
             },
           ],
         }}
