@@ -4,9 +4,11 @@ import { useShallow } from "zustand/react/shallow";
 
 interface ShellState {
   isSidebarOpen: boolean;
+  isWorkspaceOpen: boolean;
   agentName: string;
   logoUrl: string;
   setIsSidebarOpen: (isOpen: boolean) => void;
+  setIsWorkspaceOpen: (isOpen: boolean) => void;
   setAgentName: (name: string) => void;
   setLogoUrl: (url: string) => void;
 }
@@ -14,9 +16,11 @@ interface ShellState {
 export const createShellStore = ({ logoUrl, agentName }: { logoUrl: string; agentName: string }) =>
   create<ShellState>((set) => ({
     isSidebarOpen: true,
+    isWorkspaceOpen: true,
     agentName: agentName,
     logoUrl: logoUrl,
     setIsSidebarOpen: (isOpen: boolean) => set({ isSidebarOpen: isOpen }),
+    setIsWorkspaceOpen: (isOpen: boolean) => set({ isWorkspaceOpen: isOpen }),
     setAgentName: (name: string) => set({ agentName: name }),
     setLogoUrl: (url: string) => set({ logoUrl: url }),
   }));

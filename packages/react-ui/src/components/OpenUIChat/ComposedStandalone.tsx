@@ -16,6 +16,7 @@ import {
   ThreadHeader,
   ThreadList,
   WelcomeScreen,
+  WorkspaceSidebar,
 } from "../Shell";
 import { CustomComposerAdapter } from "./CustomComposerAdapter";
 import { ShareThread } from "./ShareThread";
@@ -138,6 +139,7 @@ const FullScreenInner = ({
           <DefaultComposer />
         )}
       </ThreadContainer>
+      <WorkspaceSidebar />
     </Container>
   );
 };

@@ -9,3 +9,4 @@ export * from "./Sidebar";
 export * from "./Thread";
 export * from "./ThreadList";
 export * from "./WelcomeScreen";
+export * from "./WorkspaceSidebar";
