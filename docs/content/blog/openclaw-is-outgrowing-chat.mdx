@@ -1,0 +1,44 @@
+---
+title: "OpenClaw is outgrowing chat"
+description: "Agents do real work in chat threads—and then it scrolls away. The bottleneck isn't the model; it's nowhere for the work to live. Here's what we're building instead."
+date: "2026-05-11"
+author: "Thesys Engineering Team"
+---
+
+OpenClaw is a couple of months old, and the stories are already everywhere. Agents booking trips, drafting code, summarizing inboxes, managing CRMs. Almost all of it is happening inside Telegram threads, Discord and Slack channels.
+
+Your agent never stops working. Managing what it's doing becomes its own job.
+
+The work happens. Then it gets lost.
+
+The agent isn't the bottleneck. It writes the document, sends the email, and builds the chart. OpenClaw can do a lot, and people are using it for real things. The bottleneck is everything that happens after.
+
+If you run OpenClaw the way most people do, through Telegram, Discord, or a Slack DM, your agent's outputs live in the thread that produced them. The document scrolls past. The email goes out and disappears into the same chat. The chart is rendered once, and twelve messages later you can't find it.
+
+The web UI helps a little. You can see your list of agents, your sessions, your cron jobs. But that's a control panel. It tells you what's configured, not what's been done. The artifact your agent produced this morning isn't there. The dashboard it built last week isn't there. The half-finished draft from yesterday isn't there.
+
+So you have two surfaces. One is a stream that scrolls past. The other is a settings page. Neither one is a place where the work itself lives.
+
+This is why managing it feels like a job. The work is real. There's just nowhere for it to go.
+
+## A place for the work
+
+Imagine the same week with somewhere for the agent's work to live.
+
+The chart your agent built on Tuesday is still there on Friday, in the same spot, refreshing its own data without you asking. You don't regenerate it. You open it.
+
+The CSV the agent produced has a name and a place in a tray. You can find it next week. You can hand it to a teammate. It exists as a file, not as a code block in a transcript.
+
+Sessions are browsable. Every conversation the agent had is a project with a name, not a paragraph buried in scrollback. You come back to one. You pick up where you left off.
+
+When the agent finishes a long job, you get a notification. You stop asking "is it done yet?" The job tells you.
+
+Multiple agents have their own spaces. A research agent on one side, a coding agent on the other, each with their own context, their own memory, their own running tasks. They don't compete for a single window.
+
+Chat doesn't go away. It becomes one panel of many, back to what it was actually good at: telling the agent what to do next.
+
+## What we've been building
+
+This is what we've been working on with OpenClaw-OS, on top of [openui.com](https://openui.com). It's open source. The beta is live. Try it, tell us where it breaks.
+
+OpenClaw outgrew chat the moment it became something that does real work. The interface is catching up.
