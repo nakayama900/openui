@@ -8,8 +8,12 @@ import { RendererInstance } from "./RendererInstance";
  * @category Components
  */
 export type ToolMessageRendererProps = {
-  /** The tool message containing the response payload. */
-  toolMessage: ToolMessage;
+  /**
+   * The tool message containing the response payload, or `null` while the tool
+   * call is still streaming (args have not finished arriving and no result yet).
+   * The matched renderer is rendered with `controls.isStreaming = true` in that case.
+   */
+  toolMessage: ToolMessage | null;
   /** The matching tool call from the parent assistant message (provides `name` + `arguments`). */
   toolCall: ToolCall;
   /** Rendered when no AppRenderer matches `toolCall.function.name`. */
@@ -17,16 +21,19 @@ export type ToolMessageRendererProps = {
 };
 
 /**
- * Dispatches a tool result to a matching AppRenderer if one is registered,
- * otherwise renders `fallback` (typically the default `<ToolResult>`).
+ * Dispatches a tool call (streaming or completed) to a matching AppRenderer if
+ * one is registered, otherwise renders `fallback` (typically the default
+ * `<ToolResult>`).
  *
  * Looks up `toolCall.function.name` against the AppRenderer registry provided
  * by `<ChatProvider appRenderers={...}>`. On match, hands off to
  * {@link RendererInstance} which runs the parser, registers in ThreadContext,
  * and renders the inline preview + detailed-view panel.
  *
- * Tool args (`toolCall.function.arguments`) and response (`toolMessage.content`)
- * are passed to the renderer's `parser` raw — the SDK does not pre-parse JSON.
+ * Tool args (`toolCall.function.arguments`) and response (`toolMessage.content`,
+ * or `null` while streaming) are passed to the renderer's `parser` raw — the
+ * SDK does not pre-parse JSON. The renderer's `parser` is responsible for
+ * handling partial-JSON args during streaming.
  *
  * @category Components
  */
@@ -43,7 +50,8 @@ export const ToolMessageRenderer = ({
     <RendererInstance
       renderer={renderer}
       args={toolCall.function.arguments}
-      response={toolMessage.content}
+      response={toolMessage?.content ?? null}
+      isStreaming={toolMessage === null}
     />
   );
 };

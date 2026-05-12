@@ -42,6 +42,19 @@ export const openAIResponsesAdapter = (): StreamProtocolAdapter => ({
                   toolCallId: item.call_id,
                   toolCallName: item.name,
                 };
+              } else if (item.type === "function_call_output") {
+                // Fired when a function_call_output we submitted as input is
+                // integrated into a conversation-linked response — surfaces
+                // server-side tool execution to the SDK store.
+                yield {
+                  type: EventType.TOOL_CALL_RESULT,
+                  messageId: item.id,
+                  toolCallId: item.call_id,
+                  content:
+                    typeof item.output === "string"
+                      ? item.output
+                      : JSON.stringify(item.output),
+                };
               }
               break;
             }

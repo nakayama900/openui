@@ -22,6 +22,12 @@ import { DetailedViewPanel } from "../detailed-view";
  * If `meta` returns `null`, renders inline + panel but skips ThreadContext registration —
  * a fallback `viewId` derived from `useId()` is used so `controls` remain functional.
  *
+ * The same component instance is reused as a tool call transitions from
+ * streaming (args partial, response null, isStreaming true) to completed
+ * (args full, response present, isStreaming false). Parser + meta + render
+ * functions are re-invoked on each update; ThreadContext registration stays
+ * stable as long as `meta`'s `(id, version)` does not change.
+ *
  * Internal — consumers should use {@link ToolMessageRenderer}.
  *
  * @internal
@@ -30,10 +36,12 @@ export function RendererInstance<Props>({
   renderer,
   args,
   response,
+  isStreaming = false,
 }: {
   renderer: AppRendererConfig<Props>;
   args: unknown;
   response: unknown;
+  isStreaming?: boolean;
 }) {
   const fallbackId = useId();
   const tcStore = useThreadContextStore();
@@ -42,8 +50,8 @@ export function RendererInstance<Props>({
 
   const meta = useMemo(() => {
     if (props === null) return null;
-    return renderer.meta(props, { isStreaming: false });
-  }, [renderer, props]);
+    return renderer.meta(props, { isStreaming });
+  }, [renderer, props, isStreaming]);
 
   // viewId derives from meta when present, otherwise from React's useId
   // so `controls.open` still works for an inline-only renderer.
@@ -74,7 +82,7 @@ export function RendererInstance<Props>({
     open,
     close,
     toggle,
-    isStreaming: false,
+    isStreaming,
   };
 
   return (

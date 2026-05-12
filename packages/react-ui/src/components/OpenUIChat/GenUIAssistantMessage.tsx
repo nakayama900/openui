@@ -111,18 +111,16 @@ export const GenUIAssistantMessage = ({
     [processMessage],
   );
 
-  // Partition tool messages: those handled by an AppRenderer render *outside*
-  // the BehindTheScenes panel via ToolMessageRenderer (matching by toolName).
-  // The rest fall back to the default ToolResult inside BehindTheScenes.
-  const dispatchableToolMessages = toolMessages
-    .map((tm) => {
-      const toolCall = message.toolCalls?.find((tc) => tc.id === tm.toolCallId);
-      return toolCall ? { tm, toolCall } : null;
-    })
-    .filter(
-      (x): x is { tm: ToolMessage; toolCall: NonNullable<typeof message.toolCalls>[number] } =>
-        x !== null,
-    );
+  // Iterate every tool call from the assistant message and pair it with its
+  // tool message if one has arrived yet. Streaming-in-progress tool calls
+  // (no paired tool message) are dispatched too — the matched AppRenderer
+  // sees `controls.isStreaming = true` and partial args. The same component
+  // instance is reused when the tool message arrives, so the lifecycle is
+  // smooth (no remount, no ThreadContext re-register).
+  const dispatchableEntries = (message.toolCalls ?? []).map((toolCall) => {
+    const tm = toolMessages.find((m) => m.toolCallId === toolCall.id) ?? null;
+    return { toolCall, tm };
+  });
 
   const hasToolActivity =
     (message.toolCalls && message.toolCalls.length > 0) || toolMessages.length > 0;
@@ -145,9 +143,12 @@ export const GenUIAssistantMessage = ({
           ))}
         </BehindTheScenes>
       )}
-      {dispatchableToolMessages.map(({ tm, toolCall }) => (
+      {dispatchableEntries.map(({ tm, toolCall }) => (
         <ToolMessageRenderer
-          key={tm.id}
+          // Key by toolCall id (stable from the start of the call) so the
+          // component instance persists across the streaming → completed
+          // transition.
+          key={toolCall.id}
           toolMessage={tm}
           toolCall={toolCall}
           // No fallback — when the renderer doesn't match, render nothing here;

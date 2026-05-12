@@ -21,7 +21,17 @@ export type AppRendererKind = "app" | "artifact";
 export interface AppRendererControls {
   /** Whether this renderer's detailed view is the currently active one. */
   isActive: boolean;
-  /** Whether the underlying tool response is still streaming (always `false` in v1; reserved for streaming protocol). */
+  /**
+   * `true` while the tool call is still streaming — i.e. its arguments are
+   * arriving incrementally and no tool result has been paired in yet. Becomes
+   * `false` once the tool result message lands and the renderer is invoked
+   * with the full `response`.
+   *
+   * The same component instance is reused across the streaming → completed
+   * transition, so renderers can rely on this flag to swap UI states (e.g.
+   * show a skeleton or "streaming…" badge during partial args, then the final
+   * view) without remounting.
+   */
   isStreaming: boolean;
   /** Activates this renderer's detailed view. */
   open: () => void;
@@ -61,7 +71,18 @@ export interface AppRendererConfig<Props = unknown> {
    * Converts the raw tool envelope into renderer-shaped `Props`.
    *
    * Receives `{ args, response }` exactly as the backend emitted them — the SDK
-   * does not pre-parse JSON. Return `null` to skip rendering this tool result.
+   * does not pre-parse JSON. Return `null` to skip rendering this tool call.
+   *
+   * Called on every update to args or response, including during streaming.
+   * Implementations must therefore be tolerant of:
+   *  - `args` as a *partial* JSON string (the LLM is still emitting it), and
+   *  - `response` as `null` (the tool result hasn't arrived yet — see
+   *    {@link AppRendererControls.isStreaming}).
+   *
+   * Once the tool call completes, the parser is re-invoked with full `args`
+   * and a non-null `response`. Returning a stable `Props` shape across the
+   * streaming → completed transition lets the same renderer instance update
+   * smoothly without remounting.
    */
   parser: (raw: { args: unknown; response: unknown }) => Props | null;
   /**
@@ -69,8 +90,11 @@ export interface AppRendererConfig<Props = unknown> {
    *
    * Return `null` to skip registration (the renderer still renders if `parser`
    * returned non-null Props, but the entry will not appear in the apps/artifacts list).
+   * A common pattern is to return `null` while `ctx.isStreaming === true` so the
+   * entry only appears in the registry once the tool result has arrived.
    *
-   * The `id` should be stable across re-runs of the same logical entry.
+   * The `id` should be stable across re-runs of the same logical entry — when
+   * `(id, version)` changes, the registry entry is unregistered and re-registered.
    */
   meta: (
     props: Props,
