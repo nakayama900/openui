@@ -57,6 +57,7 @@ export type SubComponentOf<P> = {
  * - React:  RenderNode = ReactNode
  * - Svelte: RenderNode = Snippet<[unknown]>
  * - Vue:    RenderNode = VNode
+ * - ArrowJS/custom adapters: RenderNode = framework-defined node value
  */
 export interface ComponentRenderProps<P = Record<string, unknown>, RenderNode = unknown> {
   props: P;
