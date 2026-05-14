@@ -70,11 +70,7 @@
     "@openuidev/lang-core": "workspace:^"
   },
   "peerDependencies": {
-<<<<<<< ours
-    "@arrow-js/core": ">=1.0.0",
-=======
     "@arrow-js/core": "^1.0.0",
->>>>>>> theirs
     "zod": "^3.25.0 || ^4.0.0"
   },
   "devDependencies": {
