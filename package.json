@@ -33,7 +33,9 @@
     "chat",
     "copilot",
     "components",
-    "ui-framework"
+    "ui-framework",
+    "arrow",
+    "arrowjs"
   ],
   "homepage": "https://openui.com",
   "author": "engineering@openui.com",

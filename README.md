@@ -19,7 +19,6 @@
 
 </div>
 
-
 OpenUI is a full-stack Generative UI framework — a compact streaming-first language, a React runtime with built-in component libraries, and ready-to-use chat interfaces — that is up to 67% more token-efficient than JSON.
 
 ⚠️ Important Notice: OpenUI has no official cryptocurrency, token, or coin.
@@ -29,7 +28,6 @@ Any token or coin using the OpenUI name on Pump.fun or any other platform is not
 Do not purchase any cryptocurrency claiming to be associated with OpenUI.
 
 ---
-
 
 <div align="center">
 
@@ -56,7 +54,6 @@ At the center of OpenUI is **OpenUI Lang**: a compact, streaming-first language 
 - **Streaming renderer** — Parse and render model output progressively in React as tokens arrive.
 - **Chat and app surfaces** - Use the same foundation for assistants, copilots, and broader interactive product flows.
 
-
 ## Quick Start
 
 ```bash
@@ -74,8 +71,6 @@ What this gives you:
 - **Library-driven prompts** - Generate instructions from your allowed component set.
 - **Streaming support** - Update the UI progressively as output arrives.
 - **Working app foundation** - Start from a ready-to-run example instead of wiring everything manually.
-
-
 
 ## How it works
 
@@ -100,12 +95,13 @@ Try it yourself in the [Playground](https://www.openui.com/playground) — gener
 
 ## Packages
 
-| Package | Description |
-| :--- | :--- |
-| [`@openuidev/react-lang`](./packages/react-lang) | Core runtime — component definitions, parser, renderer, prompt generation |
-| [`@openuidev/react-headless`](./packages/react-headless) | Headless chat state, streaming adapters, message format converters |
-| [`@openuidev/react-ui`](./packages/react-ui) | Prebuilt chat layouts and two built-in component libraries |
-| [`@openuidev/cli`](./packages/openui-cli) | CLI for scaffolding apps and generating system prompts |
+| Package                                                  | Description                                                                  |
+| :------------------------------------------------------- | :--------------------------------------------------------------------------- |
+| [`@openuidev/react-lang`](./packages/react-lang)         | React runtime — component definitions, parser, renderer, prompt generation   |
+| [`@openuidev/arrow-lang`](./packages/arrow-lang)         | ArrowJS runtime — component definitions, parser, renderer, prompt generation |
+| [`@openuidev/react-headless`](./packages/react-headless) | Headless chat state, streaming adapters, message format converters           |
+| [`@openuidev/react-ui`](./packages/react-ui)             | Prebuilt chat layouts and two built-in component libraries                   |
+| [`@openuidev/cli`](./packages/openui-cli)                | CLI for scaffolding apps and generating system prompts                       |
 
 ```bash
 npm install @openuidev/react-lang @openuidev/react-ui
@@ -146,7 +142,8 @@ Detailed documentation is available at [openui.com](https://openui.com).
 ```
 openui/
 ├── packages/
-│   ├── react-lang/       # Core runtime (parser, renderer, prompt generation)
+│   ├── react-lang/       # React runtime (parser, renderer, prompt generation)
+│   ├── arrow-lang/       # ArrowJS runtime (parser, renderer, prompt generation)
 │   ├── react-headless/   # Headless chat state & streaming adapters
 │   ├── react-ui/         # Prebuilt chat layouts & component libraries
 │   └── openui-cli/       # CLI for scaffolding & prompt generation
@@ -169,25 +166,24 @@ Good places to start:
 - [Discord](https://discord.com/invite/Pbv5PsqUSv) — Ask questions, share what you're building
 - [GitHub Issues](https://github.com/thesysdev/openui/issues) — Report bugs or request features
 
-
 ## Contributing
 
 Contributions are welcome. See [`CONTRIBUTING.md`](./CONTRIBUTING.md) for contribution guidelines and ways to get involved.
 
 ## Agent Skill
- 
+
 OpenUI ships an [Agent Skill](https://agentskills.io) so AI coding assistants (Claude Code, Codex, Cursor, Copilot, etc.) can help you scaffold, build, and debug Generative UI apps using OpenUI Lang.
- 
+
 ### Install
- 
+
 ```bash
 # With the skills CLI (works across all agents)
 npx skills add thesysdev/openui --skill openui
- 
+
 # Manual — copy into your project
 cp -r skills/openui .claude/skills/openui
 ```
- 
+
 The skill covers component library design, OpenUI Lang syntax, system prompt generation, the Renderer, SDK packages, and debugging malformed LLM output.
 
 ## Star History
