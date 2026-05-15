@@ -22,7 +22,7 @@ pnpm add @openuidev/lang-core
 - **Evaluate** reactive expressions, `$variables`, and query results at runtime
 - **Merge** incremental edits into existing programs
 
-If you're building a framework-specific app, use `@openuidev/react-lang`, `@openuidev/vue-lang` or `@openuidev/svelte-lang` instead. It re-exports everything from this package plus framework-specific components and hooks.
+If you're building a framework-specific app, use `@openuidev/react-lang`, `@openuidev/arrow-lang`, `@openuidev/vue-lang` or `@openuidev/svelte-lang` instead. It re-exports everything from this package plus framework-specific components and hooks.
 
 ## Quick Start
 
@@ -38,8 +38,8 @@ header = CardHeader("Hello")
 content = TextContent("World")
 `);
 
-console.log(result.root);       // ElementNode tree
-console.log(result.meta);       // { incomplete, unresolved, statementCount, validationErrors }
+console.log(result.root); // ElementNode tree
+console.log(result.meta); // { incomplete, unresolved, statementCount, validationErrors }
 ```
 
 ### Streaming parser
@@ -51,7 +51,7 @@ const sp = createStreamingParser(libraryJsonSchema);
 
 // Feed chunks as they arrive from the LLM
 const result1 = sp.set("root = Stack([header])\n");
-const result2 = sp.set("root = Stack([header])\nheader = CardHeader(\"Hello\")\n");
+const result2 = sp.set('root = Stack([header])\nheader = CardHeader("Hello")\n');
 // result2.root now resolves the forward reference
 ```
 
@@ -86,16 +86,16 @@ const merged = mergeStatements(original, patch);
 
 ### Parser
 
-| Export | Description |
-| :--- | :--- |
-| `createParser(schema)` | One-shot parser for complete text |
+| Export                          | Description                            |
+| :------------------------------ | :------------------------------------- |
+| `createParser(schema)`          | One-shot parser for complete text      |
 | `createStreamingParser(schema)` | Incremental parser for streaming input |
-| `parse(input, schema)` | Convenience one-shot parse |
+| `parse(input, schema)`          | Convenience one-shot parse             |
 
 ### Prompt Generation
 
-| Export | Description |
-| :--- | :--- |
+| Export                 | Description                                  |
+| :--------------------- | :------------------------------------------- |
 | `generatePrompt(spec)` | Generate a system prompt from a `PromptSpec` |
 
 **`PromptSpec`** includes component signatures, tool definitions (`ToolSpec[]`), feature flags (`toolCalls`, `bindings`, `editMode`, `inlineMode`), examples, and custom rules.
@@ -104,14 +104,14 @@ const merged = mergeStatements(original, patch);
 
 ### Runtime
 
-| Export | Description |
-| :--- | :--- |
-| `createQueryManager(toolProvider)` | Manages Query/Mutation execution and caching |
-| `createStore()` | Reactive store for `$variables` and form state |
-| `evaluate(ast, context)` | Evaluate an AST node to a concrete value |
+| Export                                | Description                                       |
+| :------------------------------------ | :------------------------------------------------ |
+| `createQueryManager(toolProvider)`    | Manages Query/Mutation execution and caching      |
+| `createStore()`                       | Reactive store for `$variables` and form state    |
+| `evaluate(ast, context)`              | Evaluate an AST node to a concrete value          |
 | `evaluateElementProps(root, context)` | Recursively evaluate all props in an element tree |
-| `extractToolResult(result)` | Extract data from an MCP `callTool` response |
-| `mergeStatements(original, patch)` | Merge incremental edits by statement name |
+| `extractToolResult(result)`           | Extract data from an MCP `callTool` response      |
+| `mergeStatements(original, patch)`    | Merge incremental edits by statement name         |
 
 ### Types
 

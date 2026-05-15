@@ -76,7 +76,10 @@ When you need detail on a specific topic, fetch the relevant page from the allow
 
 | Package                     | Purpose                                                                 | When to use               |
 | --------------------------- | ----------------------------------------------------------------------- | ------------------------- |
-| `@openuidev/react-lang`     | Core: defineComponent, createLibrary, Renderer, parser                  | Every OpenUI project      |
+| `@openuidev/react-lang`     | React: defineComponent, createLibrary, Renderer, parser                 | React OpenUI projects     |
+| `@openuidev/arrow-lang`     | ArrowJS: defineComponent, createLibrary, Renderer, parser               | ArrowJS OpenUI projects   |
+| `@openuidev/arrow-headless` | ArrowJS chat state, streaming adapters, message formats                 | Custom ArrowJS chat UI    |
+| `@openuidev/arrow-ui`       | ArrowJS component library + chat helpers                                | ArrowJS UI quick start    |
 | `@openuidev/react-headless` | Chat state: ChatProvider, hooks, streaming adapters (OpenAI, AG-UI)     | Custom chat UI            |
 | `@openuidev/react-ui`       | Prebuilt layouts (Copilot, FullScreen, BottomTray) + built-in libraries | Fast path to working chat |
 

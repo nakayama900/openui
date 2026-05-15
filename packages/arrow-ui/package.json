@@ -1,0 +1,83 @@
+{
+  "type": "module",
+  "name": "@openuidev/arrow-ui",
+  "license": "MIT",
+  "version": "0.1.0",
+  "description": "ArrowJS component library and chat helpers for OpenUI generative UI apps",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.cts",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "scripts": {
+    "test": "vitest run",
+    "build": "tsdown",
+    "typecheck": "tsc --noEmit",
+    "lint:check": "eslint ./src",
+    "lint:fix": "eslint ./src --fix",
+    "format:fix": "prettier --write ./src",
+    "format:check": "prettier --check ./src",
+    "check:publint": "publint",
+    "check:attw": "attw --pack .",
+    "prepare": "pnpm run build",
+    "prepublishOnly": "pnpm run check:publint && pnpm run check:attw",
+    "ci": "pnpm run lint:check && pnpm run format:check"
+  },
+  "peerDependencies": {
+    "@arrow-js/core": "^1.0.0",
+    "@openuidev/arrow-headless": "workspace:^",
+    "@openuidev/arrow-lang": "workspace:^",
+    "zod": "^3.25.0 || ^4.0.0"
+  },
+  "devDependencies": {
+    "@arrow-js/core": "^1.0.6",
+    "@openuidev/arrow-headless": "workspace:^",
+    "@openuidev/arrow-lang": "workspace:^",
+    "jsdom": "^26.1.0",
+    "typescript": "^5.0.0",
+    "vitest": "^3.0.0",
+    "zod": "^4.0.0"
+  },
+  "keywords": [
+    "openui",
+    "arrow",
+    "arrowjs",
+    "ui",
+    "components",
+    "generative-ui",
+    "ai",
+    "chat",
+    "chatbot",
+    "copilot",
+    "forms",
+    "theming",
+    "design-system",
+    "llm",
+    "streaming"
+  ],
+  "homepage": "https://openui.com",
+  "author": "engineering@thesys.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thesysdev/openui.git",
+    "directory": "packages/arrow-ui"
+  },
+  "bugs": {
+    "url": "https://github.com/thesysdev/openui/issues"
+  }
+}
