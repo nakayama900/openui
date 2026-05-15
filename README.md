@@ -99,6 +99,8 @@ Try it yourself in the [Playground](https://www.openui.com/playground) — gener
 | :------------------------------------------------------- | :--------------------------------------------------------------------------- |
 | [`@openuidev/react-lang`](./packages/react-lang)         | React runtime — component definitions, parser, renderer, prompt generation   |
 | [`@openuidev/arrow-lang`](./packages/arrow-lang)         | ArrowJS runtime — component definitions, parser, renderer, prompt generation |
+| [`@openuidev/arrow-headless`](./packages/arrow-headless) | Headless ArrowJS chat state, streaming adapters, message format converters   |
+| [`@openuidev/arrow-ui`](./packages/arrow-ui)             | ArrowJS component library and chat helpers                                   |
 | [`@openuidev/react-headless`](./packages/react-headless) | Headless chat state, streaming adapters, message format converters           |
 | [`@openuidev/react-ui`](./packages/react-ui)             | Prebuilt chat layouts and two built-in component libraries                   |
 | [`@openuidev/cli`](./packages/openui-cli)                | CLI for scaffolding apps and generating system prompts                       |
@@ -144,6 +146,8 @@ openui/
 ├── packages/
 │   ├── react-lang/       # React runtime (parser, renderer, prompt generation)
 │   ├── arrow-lang/       # ArrowJS runtime (parser, renderer, prompt generation)
+│   ├── arrow-headless/   # Headless ArrowJS chat state & streaming adapters
+│   ├── arrow-ui/         # ArrowJS component library & chat helpers
 │   ├── react-headless/   # Headless chat state & streaming adapters
 │   ├── react-ui/         # Prebuilt chat layouts & component libraries
 │   └── openui-cli/       # CLI for scaffolding & prompt generation
@@ -166,14 +170,9 @@ Good places to start:
 - [Discord](https://discord.com/invite/Pbv5PsqUSv) — Ask questions, share what you're building
 - [GitHub Issues](https://github.com/thesysdev/openui/issues) — Report bugs or request features
 
-<<<<<<< ours
 ## Adopters
 
 A list of organizations and projects using OpenUI is maintained in [`ADOPTERS.md`](./ADOPTERS.md). If you're using OpenUI, please consider adding your organization — it helps the project gain momentum and helps other adopters find peers using OpenUI in similar contexts.
-
-
-=======
->>>>>>> theirs
 ## Contributing
 
 Contributions are welcome. See [`CONTRIBUTING.md`](./CONTRIBUTING.md) for contribution guidelines and ways to get involved.
